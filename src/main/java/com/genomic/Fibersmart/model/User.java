@@ -8,8 +8,8 @@ import java.util.List;
 public class User {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    @Column(name = "id", unique = true, nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Long id;
 
     @Column(name = "username")
@@ -21,13 +21,13 @@ public class User {
     @Column(name = "last_name")
     private String lastName;
 
-    @Column(name = "password")
+    @Column(name = "password", nullable = false)
     private String password;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name="user_role",
-            joinColumns = {@JoinColumn(name="user_id", referencedColumnName="id")},
-            inverseJoinColumns = {@JoinColumn(name="role_id", referencedColumnName="id")})
+    @JoinTable(name="users_roles",
+            joinColumns = {@JoinColumn(name="user_id", referencedColumnName="id", nullable = false)},
+            inverseJoinColumns = {@JoinColumn(name="role_id", referencedColumnName="id", nullable = false)})
     private List<UserRole> userRoles;
 
     public User(final Long id, final String username, final String firstName, final String lastName,

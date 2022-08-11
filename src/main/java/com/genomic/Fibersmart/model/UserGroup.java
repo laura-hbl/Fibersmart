@@ -2,6 +2,7 @@ package com.genomic.Fibersmart.model;
 
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "user_groups")
@@ -18,16 +19,12 @@ public class UserGroup {
     @Column(name = "is_activated")
     private Boolean isActivated;
 
-    public UserGroup(final Long id, final String groupName, final Boolean isActivated) {
-        this.id = id;
-        this.groupName = groupName;
-        this.isActivated = isActivated;
-    }
+    List<GroupPermission> groupPermissions;
+
 
     public UserGroup() {
 
     }
-
     public Long getId() {
         return id;
     }
