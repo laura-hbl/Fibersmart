@@ -36,6 +36,11 @@
 			<artifactId>spring-boot-starter-security</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>org.springframework.security</groupId>
+			<artifactId>spring-security-test</artifactId>
+			<scope>test</scope>
+		</dependency>
+		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
@@ -73,20 +78,24 @@
 			<artifactId>validation-api</artifactId>
 		</dependency>
 		<dependency>
-			<groupId>org.assertj</groupId>
-			<artifactId>assertj-core</artifactId>
-			<version>3.14.0</version>
-			<scope>test</scope>
+			<groupId>org.hibernate.validator</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>6.2.0.Final</version>
 		</dependency>
 		<dependency>
-			<groupId>org.jacoco</groupId>
-			<artifactId>jacoco-maven-plugin</artifactId>
-			<version>0.8.5</version>
+			<groupId>org.assertj</groupId>
+			<artifactId>assertj-core</artifactId>
+			<version>3.21.0</version>
+			<scope>test</scope>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate.validator</groupId>
 			<artifactId>hibernate-validator</artifactId>
-			<version>6.1.6.Final</version>
+			<version>6.2.0.Final</version>
+		</dependency>
+		<dependency>
+			<groupId>javax.validation</groupId>
+			<artifactId>validation-api</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate.validator</groupId>
@@ -97,6 +106,7 @@
 			<artifactId>jjwt</artifactId>
 			<version>0.9.1</version>
 		</dependency>
+
 	</dependencies>
 
 	<build>
