@@ -17,27 +17,27 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 
+
+/**
+ * Custom AuthTokenFilter class that extends OncePerRequestFilter and overrides doFilterInternal() method.
+ * Filter that executes once per request.
+ */
 @Component
 public class AuthTokenFilter extends OncePerRequestFilter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(AuthTokenFilter.class);
 
-    /**
-     * JwtUtils instance.
-     */
     @Autowired
     private JwtUtils jwtUtils;
 
-    /**
-     * UserDetailsService instance.
-     */
     @Autowired
     private UserDetailsService userDetailsService;
 
+
     /**
-     * Gets JWT from the request cookie, if the request has JWT, validate it and parse username from it. Then from
+     * Gets JWT from header, if the request has JWT, validate it and parse username from it. Then from
      * username, get UserDetails to create an Authentication object and set the current Authentication object in
-     * SecurityContext using setAuthentication(authentication) method.
+     * SecurityContext.
      *
      * @param request     HttpServletRequest reference
      * @param response    HttpServletResponse reference
@@ -45,27 +45,25 @@ public class AuthTokenFilter extends OncePerRequestFilter {
      */
     @Override
     protected void doFilterInternal(final HttpServletRequest request, final HttpServletResponse response,
-                                    final FilterChain filterChain)
-            throws ServletException, IOException {
-        LOGGER.debug("Inside AuthTokenFilter's doFilterInternal method");
+                                    final FilterChain filterChain) throws ServletException, IOException {
 
         try {
-            // Gets the JWT from the request cookie
-            Cookie[] cookies = request.getCookies();
-            String jwt = cookies[0].getValue();
+            var bearer = request.getHeader("Authorization");
+            if (bearer != null) {
+                // Validates the JWT if not null
+                var token = bearer.split("Bearer ")[1];
+                if (jwtUtils.validateJwtToken(token)) {
+                    // Parses username from the JWT
+                    String username = jwtUtils.getUserNameFromJwtToken(token);
 
-            // Validates the JWT if not null
-            if (jwt != null && jwtUtils.validateJwtToken(jwt)) {
-                // Parses username from the JWT
-                String username = jwtUtils.getUserNameFromJwtToken(jwt);
+                    // Gets UserDetails to create an Authentication object
+                    UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                            userDetails, null, userDetails.getAuthorities());
 
-                // Gets UserDetails to create an Authentication object
-                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                        userDetails, null, userDetails.getAuthorities());
-
-                // Sets the current Authentication in SecurityContext
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                    // Sets the current Authentication in SecurityContext
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                }
             }
         } catch (Exception e) {
             LOGGER.error("Cannot set user authentication", e);

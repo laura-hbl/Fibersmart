@@ -11,8 +11,6 @@ import java.util.Date;
 
 /**
  * Permits to generate a JWT, validate a JWT or get username from JWT.
- *
- * @author Laura Habdul
  */
 @Component
 public class JwtUtils {
@@ -22,13 +20,13 @@ public class JwtUtils {
     /**
      * Jwt secret key.
      */
-    @Value("${fibersmartLogin.app.jwtSecret}")
+    @Value("${fibersmart.app.jwtSecret}")
     private String jwtSecret;
 
     /**
      * Jwt expiration time in milliseconds.
      */
-    @Value("${fibersmartLogin.app.jwtExpirationMs}")
+    @Value("${fibersmart.app.jwtExpirationMs}")
     private int jwtExpirationMs;
 
     /**
@@ -38,7 +36,6 @@ public class JwtUtils {
      * @return The JWT generated
      */
     public String generateJwtToken(final Authentication authentication) {
-        LOGGER.debug("Inside JwtUtils's generateJwtToken method");
 
         UserDetails userPrincipal = (UserDetails) authentication.getPrincipal();
 
@@ -56,7 +53,6 @@ public class JwtUtils {
      * @return The username retrieved from the token
      */
     public String getUserNameFromJwtToken(final String token) {
-        LOGGER.debug("Inside JwtUtils's getUserNameFromJwtToken method");
 
         return Jwts.parser().setSigningKey(jwtSecret).parseClaimsJws(token).getBody().getSubject();
     }
@@ -69,7 +65,6 @@ public class JwtUtils {
      * @return True if the JWT is valid or false is not valid
      */
     public boolean validateJwtToken(final String authToken) {
-        LOGGER.debug("Inside JwtUtils's validateJwtToken method");
 
         try {
             // This line will throw an exception if it is not a signed JWS (as expected)
