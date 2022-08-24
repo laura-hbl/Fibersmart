@@ -4,7 +4,7 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "group_licences")
+@Table(name = "grouplicences")
 public class GroupLicence {
 
     @Id
@@ -12,22 +12,19 @@ public class GroupLicence {
     @Column(name = "id", unique = true, nullable = false)
     private Long id;
 
-    @Column(name = "activated_date")
-    private Date activatedDate;
+    @Column(name = "expiration_date")
+    private Date expirationDate;
 
-    @Column(name = "expired_date")
-    private Date expiredDate;
-
-    //a voir
+    @Column(name = "days_before_expiration")
     private Integer numberOfDaysBeforeExpiration;
 
     public GroupLicence() {
     }
 
-    public GroupLicence(final Long id, final Date activatedDate, final Date expiredDate) {
+    public GroupLicence(final Long id, final Date expirationDate, final Integer numberOfDaysBeforeExpiration) {
         this.id = id;
-        this.activatedDate = activatedDate;
-        this.expiredDate = expiredDate;
+        this.expirationDate = expirationDate;
+        this.numberOfDaysBeforeExpiration = numberOfDaysBeforeExpiration;
     }
 
     public Long getId() {
@@ -38,19 +35,19 @@ public class GroupLicence {
         this.id = id;
     }
 
-    public Date getActivatedDate() {
-        return activatedDate;
+    public Date getExpirationDate() {
+        return expirationDate;
     }
 
-    public void setActivatedDate(final Date activatedDate) {
-        this.activatedDate = activatedDate;
+    public void setExpirationDate(final Date expirationDate) {
+        this.expirationDate = expirationDate;
     }
 
-    public Date getExpiredDate() {
-        return expiredDate;
+    public Integer getNumberOfDaysBeforeExpiration() {
+        return numberOfDaysBeforeExpiration;
     }
 
-    public void setExpiredDate(final Date expiredDate) {
-        this.expiredDate = expiredDate;
+    public void setNumberOfDaysBeforeExpiration(final Integer numberOfDaysBeforeExpiration) {
+        this.numberOfDaysBeforeExpiration = numberOfDaysBeforeExpiration;
     }
 }
