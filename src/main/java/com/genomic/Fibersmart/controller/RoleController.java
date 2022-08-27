@@ -76,7 +76,7 @@ public class RoleController {
      * @param roleDTO the role to be updated
      * @return ResponseEntity object which holds the updated role and Http status generated.
      */
-    @PreAuthorize("hasAuthority('MANAGE_role')")
+    @PreAuthorize("hasAuthority('MANAGE_ROLE')")
     @PutMapping("/{id}")
     public ResponseEntity<RoleDTO> updateRole(@PathVariable("id") final Long roleId,
                                               @RequestBody final RoleDTO roleDTO) {
