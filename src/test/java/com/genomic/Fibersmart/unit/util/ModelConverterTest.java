@@ -19,15 +19,15 @@ public class ModelConverterTest {
     @DisplayName("Given an UserDTO, when ToUser, then result should match expected User")
     public void givenAUserDTO_whenUser_thenReturnExpectedUser() {
 
-        UserRole userRole = new UserRole(1L, AuthorityConstants.RoleType.ROLE_ADMIN,
-                Arrays.asList(new RolePermission(1L, "ROLE_ADMIN")));
-        UserGroup userGroup = new UserGroup(1L, "GV", true,
+        Role role = new Role(1L, AuthorityConstants.RoleType.ROLE_ADMIN,
+                Arrays.asList(new RolePermission(1L, AuthorityConstants.Permission.MANAGE_USER)));
+        Group group = new Group(1L, "GV", true,
                 Arrays.asList(new GroupPermission(1L, "SEE_ALL_SLIDE")));
         User expectedUser = new User("JeanGV", "Jean", "Dupont", "password123",
-                Arrays.asList(userRole), Arrays.asList(userGroup));
+                Arrays.asList(role), Arrays.asList(group), true);
 
         User result = modelConverter.toUser(new UserDTO("JeanGV", "Jean", "Dupont",
-                "password123", Arrays.asList(userRole), Arrays.asList()));
+                "password123", Arrays.asList(role), Arrays.asList(), true));
 
         assertThat(result.getPassword()).isEqualTo(expectedUser.getPassword());
         assertThat(result.getUsername()).isEqualTo(expectedUser.getUsername());

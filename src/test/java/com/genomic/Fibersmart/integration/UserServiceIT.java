@@ -3,8 +3,6 @@ package com.genomic.Fibersmart.integration;
 import com.genomic.Fibersmart.exception.DataAlreadyRegisteredException;
 import com.genomic.Fibersmart.model.*;
 import com.genomic.Fibersmart.service.IUserService;
-import com.genomic.Fibersmart.util.DTOConverter;
-import com.genomic.Fibersmart.util.ModelConverter;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -36,7 +34,7 @@ public class UserServiceIT {
     @DisplayName("If user is not registered, when createUser, then return user saved")
     public void givenAnUnRegisteredUser_whenCreateUser_thenUserSavedShouldBeReturned() {
         User user = new User("Laura", "Laura", "Laura", "12345",
-                null, null);
+                null, null, true);
 
         User userSaved = userService.createUser(user);
 
@@ -48,7 +46,7 @@ public class UserServiceIT {
     @DisplayName("If given username is already used, when createUser, then throw DataAlreadyRegisteredException")
     public void givenAnAlreadyUsedUsername_whenRegisterUser_thenDataAlreadyRegisteredExceptionIsThrown() {
         User user = new User("admin", "admin", "admin", "admin",
-                null, null);
+                null, null, true);
 
         userService.createUser(user);
     }
@@ -57,8 +55,8 @@ public class UserServiceIT {
     @Tag("UpdateUser")
     @DisplayName("Given an user to update, when updateUser, then return user updated")
     public void givenAnUserToUpdate_whenUpdateUser_thenUserUpdatedShouldBeReturned() {
-        User userToUpdate = new User(1L, "adminUpdated", "admin", "admin",
-                "admin", null, null);
+        User userToUpdate = new User(1L,"adminUpdated", "admin", "admin", "admin",
+                null, null, true);
 
         User userUpdated = userService.updateUser(userToUpdate);
 
@@ -70,8 +68,9 @@ public class UserServiceIT {
     @Tag("UpdateUser")
     @DisplayName("If user id cant be found, when updateUser, then throw ResourceNotFoundException")
     public void givenUnFoundUserId_whenUpdateUser_thenResourceNotFoundExceptionIsThrown() {
-        User userToUpdate = new User( 6L, "adminUpdated", "admin", "admin",
-                "admin", null, null);
+        User userToUpdate = new User(6L,"adminUpdated", "admin", "admin", "admin",
+                null, null, true);
+
 
         userService.updateUser(userToUpdate);
     }

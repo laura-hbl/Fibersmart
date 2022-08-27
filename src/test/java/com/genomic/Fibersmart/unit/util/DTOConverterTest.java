@@ -18,15 +18,15 @@ public class DTOConverterTest {
     @DisplayName("Given an User, when ToUserDTO, then result should match expected UserDTO")
     public void givenAnUser_whenToUserDTO_thenReturnExpectedUserDTO() {
 
-        UserRole userRole = new UserRole(1L, AuthorityConstants.RoleType.ROLE_ADMIN,
-                Arrays.asList(new RolePermission(1L, "ROLE_ADMIN")));
-        UserGroup userGroup = new UserGroup(1L, "GV", true,
+        Role role = new Role(1L, AuthorityConstants.RoleType.ROLE_ADMIN,
+                Arrays.asList(new RolePermission(1L, AuthorityConstants.Permission.MANAGE_USER)));
+        Group group = new Group(1L, "GV", true,
                 Arrays.asList(new GroupPermission(1L, "SEE_ALL_SLIDE")));
-        UserDTO expectedUserDTO = new UserDTO("JeanGV", "Jean", "Dupont", "password123",
-                Arrays.asList(userRole), Arrays.asList(userGroup));
+        UserDTO expectedUserDTO = new UserDTO("JeanGV", "Jean", "Dupont",
+                "password123", Arrays.asList(role), Arrays.asList(group), true);
 
         UserDTO result = dtoConverter.toUserDTO(new User("JeanGV", "Jean", "Dupont",
-                "password123", Arrays.asList(userRole), Arrays.asList()));
+                "password123", Arrays.asList(role), Arrays.asList(), true));
 
         assertThat(result.getPassword()).isEqualTo(expectedUserDTO.getPassword());
         assertThat(result.getUsername()).isEqualTo(expectedUserDTO.getUsername());

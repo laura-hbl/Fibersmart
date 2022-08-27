@@ -3,7 +3,7 @@ package com.genomic.Fibersmart.unit.security;
 import com.genomic.Fibersmart.constants.AuthorityConstants;
 import com.genomic.Fibersmart.model.*;
 import com.genomic.Fibersmart.repository.UserRepository;
-import com.genomic.Fibersmart.security.MyUserDetailsService;
+import com.genomic.Fibersmart.security.UserDetailsService;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
@@ -24,24 +24,24 @@ import static org.mockito.Mockito.when;
 
 
 @RunWith(MockitoJUnitRunner.class)
-public class MyUserDetailsServiceTest {
+public class UserDetailsServiceTest {
 
     @Mock
     private UserRepository userRepository;
 
     @InjectMocks
-    private MyUserDetailsService myUserDetailsService;
+    private UserDetailsService userDetailsService;
 
     private User user;
 
     @Before
     public void setUp() {
-        UserRole userRole = new UserRole(1L, AuthorityConstants.RoleType.ROLE_ADMIN,
-                Arrays.asList(new RolePermission(1L, "ROLE_ADMIN")));
-        UserGroup userGroup = new UserGroup(1L, "GV", true,
+        Role role = new Role(1L, AuthorityConstants.RoleType.ROLE_ADMIN,
+                Arrays.asList(new RolePermission(1L, AuthorityConstants.Permission.MANAGE_USER)));
+        Group group = new Group(1L, "GV", true,
                 Arrays.asList(new GroupPermission(1L, "SEE_ALL_SLIDE")));
         user = new User("JeanGV", "Jean", "Dupont", "password123",
-                Arrays.asList(userRole), Arrays.asList(userGroup));
+                Arrays.asList(role), Arrays.asList(group), true);
     }
 
     @Test
@@ -50,7 +50,7 @@ public class MyUserDetailsServiceTest {
     public void givenAnUser_whenLoadUserByUsername_thenUserDetailsShouldBeReturnedCorrectly() {
         when(userRepository.findByUsername(anyString())).thenReturn(user);
 
-        UserDetails userDetails = myUserDetailsService.loadUserByUsername("Laura");
+        UserDetails userDetails = userDetailsService.loadUserByUsername("Laura");
 
         assertThat(userDetails.getUsername()).isEqualTo("Laura");
         assertThat(userDetails.getPassword()).isEqualTo("password123");
@@ -64,7 +64,7 @@ public class MyUserDetailsServiceTest {
     public void givenAnUnFoundUser_whenLoadUserByUsername_thenUsernameNotFoundExceptionIsThrown() {
         when(userRepository.findByUsername(anyString())).thenReturn(null);
 
-        myUserDetailsService.loadUserByUsername("Laura");
+        userDetailsService.loadUserByUsername("Laura");
     }
 
 

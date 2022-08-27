@@ -38,9 +38,9 @@ public class UserServiceTest {
 
     private static User user;
 
-    private static UserRole userRole;
+    private static Role role;
 
-    private static UserGroup userGroup;
+    private static Group group;
 
 
     public UserServiceTest() {
@@ -48,12 +48,12 @@ public class UserServiceTest {
 
     @Before
     public void setUp() {
-        userRole = new UserRole(1L, AuthorityConstants.RoleType.ROLE_ADMIN,
-                Arrays.asList(new RolePermission(1L, "ROLE_ADMIN")));
-        userGroup = new UserGroup(1L, "GV", true,
+        role = new Role(1L, AuthorityConstants.RoleType.ROLE_ADMIN,
+                Arrays.asList(new RolePermission(1L, AuthorityConstants.Permission.MANAGE_USER)));
+        group = new Group(1L, "GV", true,
                 Arrays.asList(new GroupPermission(1L, "SEE_ALL_SLIDE")));
         user = new User(1L, "JeanGV", "Jean", "Dupont", "password123",
-                Arrays.asList(userRole), Arrays.asList(userGroup));
+                Arrays.asList(role), Arrays.asList(group), true);
     }
 
     @Test
@@ -135,12 +135,12 @@ public class UserServiceTest {
     @Tag("GetAllUser")
     @DisplayName("Given an user list, when getAllUser, then result should match expected user list")
     public void givenAnUserList_whenGetAllUser_thenReturnExpectedUserList() {
-        UserRole userRole = new UserRole(1L, AuthorityConstants.RoleType.ROLE_ADMIN,
-                Arrays.asList(new RolePermission(1L, "ROLE_ADMIN")));
-        UserGroup userGroup = new UserGroup(1L, "GV", true,
+        Role role = new Role(1L, AuthorityConstants.RoleType.ROLE_ADMIN,
+                Arrays.asList(new RolePermission(1L, AuthorityConstants.Permission.MANAGE_USER)));
+        Group group = new Group(1L, "GV", true,
                 Arrays.asList(new GroupPermission(1L, "SEE_ALL_SLIDE")));
         User user2 = new User("JeanGV", "Jean", "Dupont", "password123",
-                Arrays.asList(userRole), Arrays.asList(userGroup));
+                Arrays.asList(role), Arrays.asList(group), true);
 
         when(userRepository.findAll()).thenReturn(Arrays.asList(user, user2));
 

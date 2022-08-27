@@ -20,8 +20,7 @@ import org.springframework.web.context.WebApplicationContext;
 import static org.junit.Assert.assertTrue;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestBuilders.formLogin;
 import static org.springframework.security.test.web.servlet.setup.SecurityMockMvcConfigurers.springSecurity;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
@@ -94,7 +93,7 @@ public class UserControllerIT {
     @Tag("GetAllUSer")
     public void givenALoggedInAdminUser_whenGetAllUser_thenReturnOkStatus() throws Exception {
 
-        mvc.perform(get("/user/all")
+        mvc.perform(get("/users")
                         .header("Authorization", bearerAdmin)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
@@ -105,7 +104,7 @@ public class UserControllerIT {
     @Tag("GetAllUSer")
     public void givenALoggedInStandardUser_whenGetAllUser_thenReturnForbiddenStatus() throws Exception {
 
-        mvc.perform(get("/user/all")
+        mvc.perform(get("/users")
                         .header("Authorization", bearerStandard)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
@@ -116,9 +115,9 @@ public class UserControllerIT {
     public void givenALoggedInAdminUser_whenCreateUser_thenReturnCreatedStatus() throws Exception {
 
         User userToAdd = new User("test", "test", "test", "test",
-                null, null);
+                null, null, true);
 
-        MvcResult result = mvc.perform(post("/user/register")
+        MvcResult result = mvc.perform(post("/users")
                         .header("Authorization", bearerAdmin)
                         .content(mapper.writeValueAsString(userToAdd))
                         .contentType(MediaType.APPLICATION_JSON))
@@ -131,9 +130,9 @@ public class UserControllerIT {
     public void givenALoggedInStandardUser_whenCreateUSer_thenReturnForbiddenStatus() throws Exception {
 
         User userToAdd = new User("test", "test", "test", "test",
-                null, null);
+                null, null, true);
 
-        mvc.perform(post("/user/register")
+        mvc.perform(post("/users")
                         .header("Authorization", bearerStandard)
                         .content(mapper.writeValueAsString(userToAdd))
                         .contentType(MediaType.APPLICATION_JSON))
@@ -145,7 +144,7 @@ public class UserControllerIT {
     @Tag("DeleteUSer")
     public void givenALoggedInAdminUser_whenDeleteUSer_thenReturnOkStatus() throws Exception {
 
-        mvc.perform(get("/user/delete/2")
+        mvc.perform(delete("/users/2")
                         .header("Authorization", bearerAdmin)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
@@ -159,7 +158,7 @@ public class UserControllerIT {
 
         String bearer = mvcResult.getResponse().getHeader("Authorization");
 
-        mvc.perform(get("/user/delete/2")
+        mvc.perform(delete("/users/2")
                         .header("Authorization", bearer)
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
@@ -174,9 +173,9 @@ public class UserControllerIT {
         String bearer = mvcResult.getResponse().getHeader("Authorization");
 
         User userToUpdate= new User(2L,"standard", "update", "update", "update",
-                null, null);
+                null, null, true);
 
-        mvc.perform(post("/user/update/2")
+        mvc.perform(put("/users/2")
                         .header("Authorization", bearer)
                         .content(mapper.writeValueAsString(userToUpdate))
                         .contentType(MediaType.APPLICATION_JSON))
@@ -193,10 +192,9 @@ public class UserControllerIT {
         String bearer = mvcResult.getResponse().getHeader("Authorization");
 
         User userToUpdate= new User("update", "update", "update", "standard",
-                null, null);
+                null, null, true);
 
-
-        mvc.perform(post("/user/update/2")
+        mvc.perform(put("/users/2")
                         .content(mapper.writeValueAsString(userToUpdate))
                         .header("Authorization", bearer)
                         .contentType(MediaType.APPLICATION_JSON))

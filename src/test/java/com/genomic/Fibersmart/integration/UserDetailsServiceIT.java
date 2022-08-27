@@ -1,6 +1,6 @@
 package com.genomic.Fibersmart.integration;
 
-import com.genomic.Fibersmart.security.MyUserDetailsService;
+import com.genomic.Fibersmart.security.UserDetailsService;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Tag;
@@ -20,16 +20,16 @@ import static org.assertj.core.api.Assertions.assertThat;
 @SpringBootTest
 @TestPropertySource({"/application-test.properties"})
 @Sql(scripts = "/data-test.sql", executionPhase = Sql.ExecutionPhase.BEFORE_TEST_METHOD)
-public class MyUserDetailsServiceIT {
+public class UserDetailsServiceIT {
 
     @Autowired
-    private MyUserDetailsService myUserDetailsService;
+    private UserDetailsService userDetailsService;
 
     @Test
     @Tag("LoadUserByUsername")
     @DisplayName("Given an user, when loadUserByUsername, then return correct user details")
     public void givenAnUser_whenLoadUserByUsername_thenReturnCorrectUserDetails() {
-        UserDetails userDetails = myUserDetailsService.loadUserByUsername("admin");
+        UserDetails userDetails = userDetailsService.loadUserByUsername("admin");
 
         assertThat(userDetails.getUsername()).isEqualTo("admin");
 
@@ -39,6 +39,6 @@ public class MyUserDetailsServiceIT {
     @Tag("LoadUserByUsername")
     @DisplayName("If user is not registered, when loadUserByUsername, then throw UsernameNotFoundException")
     public void givenAnUnFoundUser_whenLoadUserByUsername_thenUsernameNotFoundExceptionIsThrown() {
-        myUserDetailsService.loadUserByUsername("foo");
+        userDetailsService.loadUserByUsername("foo");
     }
 }
