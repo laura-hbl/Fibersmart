@@ -3,7 +3,7 @@ package com.genomic.Fibersmart.model;
 import javax.persistence.*;
 
 /**
- * Every {@link User} can belong to one {@link UserGroup userGroups}, and each {@code UserGroup} may have many
+ * Every {@link User} can belong to one {@link Group groups}, and each {@code group} may have many
  * {@code permissions}. {@code permissions} allow us to identify whether or not {@code User} has access to
  * different parts of the application.
  */

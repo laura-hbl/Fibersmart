@@ -5,13 +5,13 @@ import javax.persistence.*;
 import java.util.List;
 
 /**
- * {@code userGroups} have a {@code @ManyToMany} mapping with {@code users}. {@code userGroups} are made up of a
+ * {@code groups} have a {@code @ManyToMany} mapping with {@code users}. {@code groups} are made up of a
  * {@code @ManyToMany} mapping of {@link GroupPermission permissions}, which define user group access rights to
  * different areas of the application via the controllers.
  */
 @Entity
-@Table(name = "usergroups")
-public class UserGroup {
+@Table(name = "groups")
+public class Group {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -19,7 +19,7 @@ public class UserGroup {
     private Long id;
 
     /**
-     * Name of the {@link UserGroup userGroups}.
+     * Name of the {@link Group groups}.
      */
     @Column(name = "group_name")
     private String groupName;
@@ -28,28 +28,28 @@ public class UserGroup {
     private Boolean isActivated;
 
     /**
-     * {@link UserGroup userGroups} are made up of a {@code @ManyToMany} mapping of {@link GroupPermission permissions}.
-     * Different {@code userGroups} can share the same predefined {@code permissions}.
+     * {@link Group groups} are made up of a {@code @ManyToMany} mapping of {@link GroupPermission permissions}.
+     * Different {@code groups} can share the same predefined {@code permissions}.
      */
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "usergroups_grouppermissions",
-            joinColumns = {@JoinColumn(name = "usergroup_id", referencedColumnName = "id")},
+    @JoinTable(name = "groups_grouppermissions",
+            joinColumns = {@JoinColumn(name = "group_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "grouppermission_id", referencedColumnName = "id")})
     List<GroupPermission> groupPermissions;
 
 
-    public UserGroup() {
+    public Group() {
 
     }
 
-    public UserGroup(final String groupName, final Boolean isActivated, final List<GroupPermission> groupPermissions) {
+    public Group(final String groupName, final Boolean isActivated, final List<GroupPermission> groupPermissions) {
         this.groupName = groupName;
         this.isActivated = isActivated;
         this.groupPermissions = groupPermissions;
     }
 
-    public UserGroup(final Long id, final String groupName, final Boolean isActivated,
-                     final List<GroupPermission> groupPermissions) {
+    public Group(final Long id, final String groupName, final Boolean isActivated,
+                 final List<GroupPermission> groupPermissions) {
         this.id = id;
         this.groupName = groupName;
         this.isActivated = isActivated;

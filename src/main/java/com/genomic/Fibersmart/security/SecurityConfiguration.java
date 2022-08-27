@@ -152,7 +152,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     }
 
     /**
-     * Handles logout success and invalidates the cookie.
+     * Handles logout success.
      *
      * @param response       HttpServletResponse object
      * @param request        HttpServletRequest object

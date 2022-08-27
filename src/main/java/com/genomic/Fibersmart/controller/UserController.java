@@ -1,5 +1,7 @@
 package com.genomic.Fibersmart.controller;
 
+import com.genomic.Fibersmart.constants.AuthorityConstants;
+import com.genomic.Fibersmart.dto.PasswordDTO;
 import com.genomic.Fibersmart.dto.UserDTO;
 import com.genomic.Fibersmart.model.User;
 import com.genomic.Fibersmart.service.IUserService;
@@ -13,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,8 +26,8 @@ import java.util.stream.Collectors;
  * @see IUserService
  */
 @RestController
-@RequestMapping("/user")
 @SecurityRequirement(name = "bearerAuth")
+@RequestMapping("/users")
 public class UserController {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(UserController.class);
@@ -53,14 +56,13 @@ public class UserController {
      * @return ResponseEntity object which holds the created user and Http status generated.
      */
     @PreAuthorize("hasAuthority('MANAGE_USER')")
-    @RequestMapping(value = "/register", method = RequestMethod.POST)
+    @PostMapping
     public ResponseEntity<UserDTO> createUser(@RequestBody final UserDTO userDTO) {
-        LOGGER.debug("POST Request on /user/register with username {}", userDTO.getUsername());
+        LOGGER.debug("POST Request on /users with username {}", userDTO.getUsername());
 
         User user = userService.createUser(modelConverter.toUser(userDTO));
         UserDTO createdUser = dtoConverter.toUserDTO(user);
 
-        LOGGER.info("POST Request on /user/register with username {} - SUCCESS");
         return new ResponseEntity<>(createdUser, HttpStatus.CREATED);
     }
 
@@ -70,9 +72,9 @@ public class UserController {
      * @param userId id of the {@link User} to delete.
      */
     @PreAuthorize("hasAuthority('MANAGE_USER')")
-    @GetMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public void deleteUser(@PathVariable("id") final Long userId) {
-        LOGGER.debug("GET Request on /user/delete/{id} with id : {}", userId);
+        LOGGER.debug("DELETE Request on /users/{id} with id : {}", userId);
 
         userService.deleteUser(userId);
     }
@@ -85,10 +87,10 @@ public class UserController {
      * @return ResponseEntity object which holds the updated user and Http status generated.
      */
     @PreAuthorize("hasAuthority('MANAGE_USER')")
-    @PostMapping("/update/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<UserDTO> updateUser(@PathVariable("id") final Long userId,
                                               @RequestBody final UserDTO userDTO) {
-        LOGGER.debug("GET Request on /user/update/{id} with id : {}", userId);
+        LOGGER.debug("PUT Request on /users/{id} with id : {}", userId);
 
         User userToUpdate = modelConverter.toUser(userDTO);
         userToUpdate.setId(userId);
@@ -104,9 +106,9 @@ public class UserController {
      * @return ResponseEntity object which holds the user list and Http status generated.
      */
     @PreAuthorize("hasAuthority('MANAGE_USER')")
-    @GetMapping("/all")
+    @GetMapping
     public ResponseEntity<List<UserDTO>> getAllUser() {
-        LOGGER.debug("GET Request on /user/all");
+        LOGGER.debug("GET Request on /users");
 
         List<UserDTO> users = userService.getAllUser().stream()
                 .map(user -> dtoConverter.toUserDTO(user))
@@ -114,6 +116,33 @@ public class UserController {
 
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
+
+    /**
+     * Updates the user password.
+     *
+     * @param userId   id of the user which password will be updated
+     * @param password object which holds current and new password
+     * @return ResponseEntity object that contains the user whose password is updated and Http status generated.
+     */
+    @PutMapping("/{id}/password")
+    public ResponseEntity<UserDTO> changePassword(@PathVariable("id") final Long userId,
+                                                  @RequestBody final PasswordDTO password) {
+        LOGGER.debug("PUT Request on /users/{id}/password with id : {}", userId);
+
+        // Retrieves current logged in user
+        User loggedInUser = userService.getLoggedInUser();
+
+        // Checks user permissions
+        List<AuthorityConstants.Permission> loggedInUserPermissions = userService.getUserPermissions(loggedInUser);
+
+        // User can't change password if he is not the current logged in user or if he doesn't have the right to do so
+        if (loggedInUser.getId() == userId || loggedInUserPermissions.contains(AuthorityConstants.Permission.MANAGE_USER)) {
+            User user = userService.changePassword(userId, password);
+
+            return new ResponseEntity<>(dtoConverter.toUserDTO(user), HttpStatus.OK);
+        }
+
+        return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+
+    }
 }
-
-

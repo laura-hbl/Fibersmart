@@ -1,7 +1,7 @@
 package com.genomic.Fibersmart.dto;
 
-import com.genomic.Fibersmart.model.UserGroup;
-import com.genomic.Fibersmart.model.UserRole;
+import com.genomic.Fibersmart.model.Group;
+import com.genomic.Fibersmart.model.Role;
 
 import java.util.List;
 
@@ -20,29 +20,35 @@ public class UserDTO {
 
     private String password;
 
-    private List<UserRole> userRoles;
+    private List<Role> roles;
 
-    private List<UserGroup> userGroups;
+    private List<Group> groups;
+
+    private Boolean enabled;
 
     public UserDTO(final Long id, final String username, final String firstName, final String lastName,
-                   final String password, final List<UserRole> userRoles, final List<UserGroup> userGroups) {
+                   final String password, final List<Role> roles, final List<Group> groups,
+                   final Boolean enabled) {
         this.id = id;
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
-        this.userRoles = userRoles;
-        this.userGroups = userGroups;
+        this.roles = roles;
+        this.groups = groups;
+        this.enabled = enabled;
     }
 
     public UserDTO(final String username, final String firstName, final String lastName,
-                   final String password, final List<UserRole> userRoles, final List<UserGroup> userGroups) {
+                   final String password, final List<Role> roles, final List<Group> groups,
+                   final Boolean enabled) {
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
-        this.userRoles = userRoles;
-        this.userGroups = userGroups;
+        this.roles = roles;
+        this.groups = groups;
+        this.enabled = enabled;
     }
 
     public UserDTO() {
@@ -88,19 +94,27 @@ public class UserDTO {
         this.password = password;
     }
 
-    public List<UserRole> getUserRoles() {
-        return userRoles;
+    public List<Role> getUserRoles() {
+        return roles;
     }
 
-    public void setUserRoles(final List<UserRole> userRoles) {
-        this.userRoles = userRoles;
+    public void setUserRoles(final List<Role> roles) {
+        this.roles = roles;
     }
 
-    public List<UserGroup> getUserGroups() {
-        return userGroups;
+    public List<Group> getUserGroups() {
+        return groups;
     }
 
-    public void setUserGroups(final List<UserGroup> userGroups) {
-        this.userGroups = userGroups;
+    public void setUserGroups(final List<Group> groups) {
+        this.groups = groups;
+    }
+
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(final Boolean enabled) {
+        this.enabled = enabled;
     }
 }

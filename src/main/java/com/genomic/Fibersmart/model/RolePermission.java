@@ -1,9 +1,11 @@
 package com.genomic.Fibersmart.model;
 
+import com.genomic.Fibersmart.constants.AuthorityConstants;
+
 import javax.persistence.*;
 
 /**
- * Every {@link User} can have a one or many {@link UserRole userRoles}, and each {@code UserRole} may have many
+ * Every {@link User} can have a one or many {@link Role roles}, and each {@code Role} may have many
  * {@code permissions}. {@code permissions} allow us to identify whether or not {@code User} has access to
  * different parts of the application.
  */
@@ -17,9 +19,10 @@ public class RolePermission {
     private Long id;
 
     @Column(name = "permission", nullable = false)
-    private String permission;
+    @Enumerated(EnumType.STRING)
+    private AuthorityConstants.Permission permission;
 
-    public RolePermission(final Long id, final String permission) {
+    public RolePermission(final Long id, final AuthorityConstants.Permission permission) {
         this.id = id;
         this.permission = permission;
     }
@@ -28,7 +31,8 @@ public class RolePermission {
 
     }
 
-    public RolePermission(final String permission) {
+    public RolePermission(final AuthorityConstants.Permission permission) {
+        this.permission = permission;
     }
 
     public void setId(final Long id) {
@@ -39,11 +43,11 @@ public class RolePermission {
         return id;
     }
 
-    public void setPermission(final String permission) {
+    public void setPermission(final AuthorityConstants.Permission permission) {
         this.permission = permission;
     }
 
-    public String getPermission() {
-        return permission;
+    public AuthorityConstants.Permission getPermission() {
+        return this.permission;
     }
 }

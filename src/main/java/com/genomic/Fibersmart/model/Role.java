@@ -8,13 +8,13 @@ import java.util.List;
 
 
 /**
- * {@code userRoles} have a {@code @ManyToMany} mapping with {@code users}. {@code userRoles} are made up of a
+ * {@code roles} have a {@code @ManyToMany} mapping with {@code users}. {@code roles} are made up of a
  * {@code @ManyToMany} mapping of {@link RolePermission permissions}, which define {@code User} access rights to
  * different areas of the application via the controllers.
  */
 @Entity
-@Table(name = "userroles")
-public class UserRole {
+@Table(name = "roles")
+public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -22,33 +22,33 @@ public class UserRole {
     private Long id;
 
     /**
-     * The type name of this {@link UserRole}. Must be unique - used to look up the {@code UserRole} in the database.
+     * The type name of this {@link Role}. Must be unique - used to look up the {@code Role} in the database.
      */
     @Column(name = "role_type", unique = true, nullable = false)
     @Enumerated(EnumType.STRING)
     private AuthorityConstants.RoleType roleType;
 
     /**
-     * {@link UserRole userRoles} are made up of a {@code @ManyToMany} mapping of {@link RolePermission permissions}.
-     * Different {@code userRoles} can share the same predefined {@code permissions}. {@code permissions} are used
+     * {@link Role roles} are made up of a {@code @ManyToMany} mapping of {@link RolePermission permissions}.
+     * Different {@code roles} can share the same predefined {@code permissions}. {@code permissions} are used
      * internally by spring.
      */
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "userroles_rolepermissions",
-            joinColumns = {@JoinColumn(name = "userrole_id", referencedColumnName = "id")},
+    @JoinTable(name = "roles_rolepermissions",
+            joinColumns = {@JoinColumn(name = "role_id", referencedColumnName = "id")},
             inverseJoinColumns = {@JoinColumn(name = "rolepermission_id", referencedColumnName = "id")})
     private List<RolePermission> permissions = new ArrayList<>();
 
-    public UserRole() {
+    public Role() {
     }
 
-    public UserRole(final Long id, final AuthorityConstants.RoleType roleType, final List<RolePermission> permissions) {
+    public Role(final Long id, final AuthorityConstants.RoleType roleType, final List<RolePermission> permissions) {
         this.id = id;
         this.roleType = roleType;
         this.permissions = permissions;
     }
 
-    public UserRole(final AuthorityConstants.RoleType roleType, final List<RolePermission> permissions) {
+    public Role(final AuthorityConstants.RoleType roleType, final List<RolePermission> permissions) {
         this.roleType = roleType;
         this.permissions = permissions;
     }

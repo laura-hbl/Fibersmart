@@ -7,6 +7,9 @@ import io.swagger.v3.oas.annotations.info.Info;
 import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * Swagger configuration class.
+ */
 @OpenAPIDefinition(info = @Info(title = "REST API", version = "v1"))
 @SecurityScheme(
         name = "bearerAuth",

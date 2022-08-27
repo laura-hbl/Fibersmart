@@ -1,5 +1,7 @@
 package com.genomic.Fibersmart.model;
 
+import com.genomic.Fibersmart.security.UserDetailsService;
+
 import javax.persistence.*;
 import java.util.List;
 
@@ -41,46 +43,56 @@ public class User {
 
     /**
      * {@code users} are granted access to different areas of the application depending on their assigned
-     * {@link UserRole userRoles}. These are loaded each time a user logs in.
+     * {@link Role roles}. These are loaded each time a user logs in.
      *
-     * @see com.genomic.Fibersmart.security.MyUserDetailsService#loadUserByUsername(String)
+     * @see UserDetailsService#loadUserByUsername(String)
      */
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name="users_userroles",
+    @JoinTable(name="users_roles",
             joinColumns = {@JoinColumn(name="user_id", referencedColumnName="id", nullable = false)},
-            inverseJoinColumns = {@JoinColumn(name="userrole_id", referencedColumnName="id", nullable = false)})
-    private List<UserRole> userRoles;
+            inverseJoinColumns = {@JoinColumn(name="role_id", referencedColumnName="id", nullable = false)})
+    private List<Role> roles;
 
     /**
      * {@code users} are granted access to different areas of the application depending on their assigned
-     * {@link UserGroup userGroup}. These are loaded each time a user logs in.
+     * {@link Group groups}. These are loaded each time a user logs in.
      */
     @ManyToMany()
-    @JoinTable(name="users_usergroups",
+    @JoinTable(name="users_groups",
             joinColumns = {@JoinColumn(name="user_id", referencedColumnName="id", nullable = false)},
-            inverseJoinColumns = {@JoinColumn(name="usergroup_id", referencedColumnName="id", nullable = false)})
-    private List<UserGroup> userGroups;
+            inverseJoinColumns = {@JoinColumn(name="group_id", referencedColumnName="id", nullable = false)})
+    private List<Group> groups;
+
+
+    /**
+     * Indicates whether the user is enabled or not.
+     */
+    @Column(name = "enabled")
+    private Boolean enabled;
 
 
     public User(final Long id, final String username, final String firstName, final String lastName,
-                final String password, final List<UserRole> userRoles, final List<UserGroup> userGroups) {
+                final String password, final List<Role> roles, final List<Group> groups,
+                final Boolean enabled) {
         this.id = id;
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
-        this.userRoles = userRoles;
-        this.userGroups = userGroups;
+        this.roles = roles;
+        this.groups = groups;
+        this.enabled = enabled;
     }
 
     public User(final String username, final String firstName, final String lastName, final String password,
-                final List<UserRole> userRoles, final List<UserGroup> userGroups) {
+                final List<Role> roles, final List<Group> groups, final Boolean enabled) {
         this.username = username;
         this.firstName = firstName;
         this.lastName = lastName;
         this.password = password;
-        this.userRoles = userRoles;
-        this.userGroups = userGroups;
+        this.roles = roles;
+        this.groups = groups;
+        this.enabled = enabled;
     }
 
     public User() {
@@ -126,19 +138,27 @@ public class User {
         this.password = password;
     }
 
-    public List<UserRole> getUserRoles() {
-        return userRoles;
+    public List<Role> getUserRoles() {
+        return roles;
     }
 
-    public void setUserRoles(final List<UserRole> userRoles) {
-        this.userRoles = userRoles;
+    public void setUserRoles(final List<Role> roles) {
+        this.roles = roles;
     }
 
-    public List<UserGroup> getUserGroups() {
-        return userGroups;
+    public List<Group> getUserGroups() {
+        return groups;
     }
 
-    public void setUserGroups(final List<UserGroup> userGroups) {
-        this.userGroups = userGroups;
+    public void setUserGroups(final List<Group> groups) {
+        this.groups = groups;
+    }
+
+    public Boolean getEnabled() {
+        return enabled;
+    }
+
+    public void setEnabled(final Boolean enabled) {
+        this.enabled = enabled;
     }
 }

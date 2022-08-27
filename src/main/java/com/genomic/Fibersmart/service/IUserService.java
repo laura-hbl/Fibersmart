@@ -1,6 +1,10 @@
 package com.genomic.Fibersmart.service;
 
+import com.genomic.Fibersmart.constants.AuthorityConstants;
+import com.genomic.Fibersmart.dto.PasswordDTO;
 import com.genomic.Fibersmart.dto.UserDTO;
+import com.genomic.Fibersmart.model.Role;
+import com.genomic.Fibersmart.model.RolePermission;
 import com.genomic.Fibersmart.model.User;
 
 import java.util.List;
@@ -39,4 +43,28 @@ public interface IUserService {
      */
     User updateUser(final User user);
 
+
+    /**
+     * Retrieves the logg in user.
+     *
+     * @return The connected {@link User}
+     */
+    User getLoggedInUser();
+
+
+    /**
+     * Changes user password.
+     *
+     * @return The {@link User} whose password is updated.
+     */
+    User changePassword(final Long userId, final PasswordDTO password);
+
+
+    /**
+     * Retrieves user permissions.
+     *
+     * @param user {@link User} user whose permissions are being retrieved
+     * @return list of {@code AuthorityConstants.Permission} in string format.
+     */
+    List<AuthorityConstants.Permission> getUserPermissions(final User user);
 }

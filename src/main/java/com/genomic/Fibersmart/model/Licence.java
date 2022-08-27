@@ -4,8 +4,8 @@ import javax.persistence.*;
 import java.util.Date;
 
 @Entity
-@Table(name = "grouplicences")
-public class GroupLicence {
+@Table(name = "licences")
+public class Licence {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -18,10 +18,10 @@ public class GroupLicence {
     @Column(name = "days_before_expiration")
     private Integer numberOfDaysBeforeExpiration;
 
-    public GroupLicence() {
+    public Licence() {
     }
 
-    public GroupLicence(final Long id, final Date expirationDate, final Integer numberOfDaysBeforeExpiration) {
+    public Licence(final Long id, final Date expirationDate, final Integer numberOfDaysBeforeExpiration) {
         this.id = id;
         this.expirationDate = expirationDate;
         this.numberOfDaysBeforeExpiration = numberOfDaysBeforeExpiration;
